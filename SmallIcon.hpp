@@ -1,10 +1,10 @@
-/************************************************
+﻿/************************************************
  SmallIcon class
 
- �w��p�X����A�X���[���A�C�R�����擾����N���X
+ 指定パスから、スモールアイコンを取得するクラス
 
- SHGetFileInfo�֐����g�p�A
- CoInitialize���Ăяo���Ă����K�v����B
+ SHGetFileInfo関数を使用、
+ CoInitializeを呼び出しておく必要あり。
 
                                    2012 tyabuta
 ************************************************/
@@ -17,7 +17,7 @@ namespace ty{
 /*
  * class SmallIcon
  *
- * �R���X�g���N�^�܂��́AInit���\�b�h�ɂăA�C�R��PATH���w�肷��B
+ * コンストラクタまたは、InitメソッドにてアイコンPATHを指定する。
  * SmallIcon(const std::string& path)
  * bool Init(const std::string& path)
  * void Destroy();
@@ -46,19 +46,19 @@ public:
     bool Init(const std::string& path){
         path_ = path; 
 
-        // ���łɃA�C�R�����ǂݍ��܂�Ă�����A�j������B
+        // すでにアイコンが読み込まれていたら、破棄する。
         Destroy();
 
-        // SHFILEINFO�\���̂̏�����
+        // SHFILEINFO構造体の初期化
         SHFILEINFO info;
         ZeroMemory(&info, sizeof(info));
 
-        // �X���[���A�C�R�����擾
+        // スモールアイコンを取得
         SHGetFileInfoA(path.c_str(), 0, &info, sizeof(info),
                        SHGFI_ICON | SHGFI_SMALLICON);
         hIcon_ = info.hIcon;
 
-        // NULL�Ȃ�A�擾�Ɏ��s���Ă���B
+        // NULLなら、取得に失敗している。
         return hIcon_ != NULL;
     }
 
